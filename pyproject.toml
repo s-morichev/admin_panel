@@ -1,0 +1,59 @@
+[tool.poetry]
+name = "new-admin-panel-sprint-3"
+version = "0.1.0"
+description = ""
+authors = ["Sergey Morichev <s.morichev@yandex.ru>"]
+readme = "README.md"
+packages = [{include = "new_admin_panel_sprint_2"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+psycopg2 = "^2.9.5"
+pydantic = "^1.10.2"
+python-dotenv = "^0.21.0"
+
+[tool.poetry.group.movies_admin.dependencies]
+django = "^4.1.2"
+django-split-settings = "^1.2.0"
+gunicorn = "^20.1.0"
+
+[tool.poetry.group.etl.dependencies]
+backoff = "^2.2.1"
+elasticsearch = "==8.5.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+django-cors-headers = "^3.13.0"
+django-debug-toolbar = "^3.7.0"
+django-extensions = "^3.2.1"
+isort = "^5.10.1"
+flake8-pyproject = "^1.1.0.post0"
+flake8 = "^5.0.4"
+flake8-commas = "^2.1.0"
+flake8-quotes = "^3.3.1"
+flake8-comprehensions = "^3.10.1"
+flake8-docstrings = "^1.6.0"
+flake8-string-format = "^0.3.0"
+flake8-bugbear = "^22.10.27"
+flake8-debugger = "^4.1.2"
+flake8-isort = "^5.0.0"
+flake8-eradicate = "^1.4.0"
+flake8-bandit = "^4.1.1"
+flake8-broken-line = "^0.6.0"
+pep8-naming = "^0.13.2"
+darglint = "^1.8.1"
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "E501", "D1"]
+extend-select = "B950"
+inline-quotes = '"'
+exclude = "manage.py"
+per-file-ignores = [
+    "*/migrations/*: C812",
+    "./postgres_to_es/state_.py: DAR101, DAR201, DAR401",
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

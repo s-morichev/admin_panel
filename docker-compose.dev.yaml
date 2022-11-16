@@ -1,0 +1,69 @@
+services:
+  movies_admin:
+    build:
+      context: .
+      dockerfile: ./docker/movies_admin/Dockerfile
+      target: development
+      tags:
+        - "movies_admin_dev_sprint_3"
+    container_name: movies_admin
+    volumes:
+      - ./movies_admin/:/opt/app/
+    ports:
+      - "8000:8000"
+      - "80:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  etl:
+    build:
+      context: .
+      dockerfile: ./docker/etl/Dockerfile
+      target: development
+      tags:
+        - "etl_dev_sprint_3"
+    container_name: etl
+    volumes:
+      - ./postgres_to_es/:/opt/app/
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - elasticsearch
+
+  postgres:
+    build:
+      context: ./docker/postgres
+      tags:
+        - "postgres_sprint_3"
+    container_name: postgres
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB_NAME}
+
+  elasticsearch:
+    image: elasticsearch:8.5.0
+    container_name: elasticsearch
+    volumes:
+      - elasticsearch_data_dev:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms4g -Xmx4g
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+volumes:
+  postgres_data_dev:
+  elasticsearch_data_dev:
