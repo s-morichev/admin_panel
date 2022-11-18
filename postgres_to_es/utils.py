@@ -1,7 +1,7 @@
+import http
 import json
 import logging
 from contextlib import closing
-import http
 from pathlib import Path
 from typing import Any
 

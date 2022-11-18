@@ -15,6 +15,7 @@ ESActions = Iterator[dict[str, Any]]
 
 DELTA = datetime.timedelta(milliseconds=1)
 
+
 @backoff.on_exception(**BACKOFF_CONFIG)
 def _load_bulk(actions: ESActions) -> int:
     """Bulk load chunk of documents into Elasticsearch.

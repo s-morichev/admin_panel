@@ -4,11 +4,11 @@ import time
 import backoff
 import extractor
 import loader
+import logging_config
 import state_
 import transformer
 import utils
 from settings import APP_CONFIG, BACKOFF_CONFIG
-import logging_config
 
 logger = logging.getLogger(__name__)
 
