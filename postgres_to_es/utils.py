@@ -1,6 +1,7 @@
 import json
 import logging
 from contextlib import closing
+import http
 from pathlib import Path
 from typing import Any
 
@@ -80,7 +81,7 @@ def create_elasticsearch_index(index_name: str) -> None:
     index_definition = load_index_definition(path)
 
     with closing(get_elasticsearch_client()) as es:
-        es.options(ignore_status=400).indices.create(
+        es.options(ignore_status=http.HTTPStatus.BAD_REQUEST).indices.create(
             index=index_name,
             settings=index_definition.get("settings"),
             mappings=index_definition.get("mappings"),

@@ -8,13 +8,9 @@ import state_
 import transformer
 import utils
 from settings import APP_CONFIG, BACKOFF_CONFIG
+import logging_config
 
-logging.basicConfig(
-    level=logging.DEBUG if APP_CONFIG.debug else logging.INFO,
-    format="%(asctime)s %(levelname)s: %(message)s",
-)
 logger = logging.getLogger(__name__)
-logging.getLogger("backoff").addHandler(logging.StreamHandler())
 
 
 @backoff.on_exception(**BACKOFF_CONFIG)
@@ -49,5 +45,6 @@ def main():
 
 
 if __name__ == "__main__":
+    logging_config.setup_logging()
     utils.create_elasticsearch_index(APP_CONFIG.es_index_name)
     main()

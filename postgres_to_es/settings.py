@@ -3,15 +3,12 @@ from pathlib import Path
 import backoff
 import elastic_transport
 import psycopg2
-from dotenv import load_dotenv
 from pydantic import BaseSettings, Field
-
-load_dotenv()
 
 
 class AppConfig(BaseSettings):
-    debug: bool = Field(..., env="DEBUG")
-    chunk_size: int = Field(..., env="CHUNK_SIZE")
+    debug: bool
+    chunk_size: int
     etl_interval: int = Field(..., env="ETL_RUNS_INTERVAL")
     backoff_interval: float = Field(..., env="BACKOFF_MAX_RETRY_INTERVAL")
     es_index_name = "movies"
@@ -20,16 +17,22 @@ class AppConfig(BaseSettings):
 
 class PostgresDSN(BaseSettings):
     dbname: str = Field(..., env="POSTGRES_DB_NAME")
-    user: str = Field(..., env="POSTGRES_USER")
-    password: str = Field(..., env="POSTGRES_PASSWORD")
-    host: str = Field(..., env="POSTGRES_HOST")
-    port: int = Field(..., env="POSTGRES_PORT")
-    options: str = Field(..., env="POSTGRES_OPTIONS")
+    user: str
+    password: str
+    host: str
+    port: int
+    options: str
+
+    class Config:
+        env_prefix = "postgres_"
 
 
 class ElasticDSN(BaseSettings):
-    host: str = Field(..., env="ELASTICSEARCH_HOST")
-    port: int = Field(..., env="ELASTICSEARCH_PORT")
+    host: str
+    port: int
+
+    class Config:
+        env_prefix = "elasticsearch_"
 
 
 POSTGRES_DSN = PostgresDSN()
