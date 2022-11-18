@@ -1,3 +1,4 @@
+import datetime
 from typing import Any, Iterator
 
 import models
@@ -8,7 +9,7 @@ ESActions = Iterator[dict[str, Any]]
 
 def transform(
     models_generator: Iterator[tuple[models.MovieDocument]],
-) -> Iterator[tuple[ESActions, str]]:
+) -> Iterator[tuple[ESActions, datetime.datetime]]:
     """Transform pydantic models into elasticsearch documents.
 
     Args:
@@ -16,11 +17,11 @@ def transform(
             to transform.
 
     Yields:
-        Tuple consisting of generator of elasticsearch documents and timestamp
-        of modification date of last document in that generator.
+        Tuple consisting of generator of elasticsearch documents and datetime
+        of modification of last document in that generator.
     """
     for models_tuple in models_generator:
-        last_modified = models_tuple[-1].modified.isoformat()
+        last_modified = models_tuple[-1].modified
         actions = (
             {
                 "_index": APP_CONFIG.es_index_name,
