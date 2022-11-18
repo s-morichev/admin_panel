@@ -15,7 +15,7 @@ ESActions = Iterator[dict[str, Any]]
 
 @backoff.on_exception(**BACKOFF_CONFIG)
 def _load_bulk(actions: ESActions) -> int:
-    """Bulk load chunk of documents into Elasticserch.
+    """Bulk load chunk of documents into Elasticsearch.
 
     Uses backoff to wait until successful loading.
 

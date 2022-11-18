@@ -25,7 +25,7 @@ def get_postgres_connection() -> connection:
         PostgeSQL connection.
     """
     conn = psycopg2.connect(**POSTGRES_DSN.dict(), cursor_factory=DictCursor)
-    conn.autocommit - True
+    conn.autocommit = True
     return conn
 
 
