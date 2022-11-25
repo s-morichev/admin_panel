@@ -10,7 +10,8 @@ import psycopg2
 from elasticsearch import Elasticsearch
 from psycopg2.extensions import connection
 from psycopg2.extras import DictCursor
-from settings import BACKOFF_CONFIG, ELASTIC_DSN, POSTGRES_DSN
+
+from postgres_to_es.settings import BACKOFF_CONFIG, ELASTIC_DSN, POSTGRES_DSN
 
 logger = logging.getLogger(__name__)
 

@@ -26,7 +26,7 @@ services:
         - "etl_dev_sprint_3"
     container_name: etl
     volumes:
-      - ./postgres_to_es/:/opt/app/
+      - ./postgres_to_es/:/opt/postgres_to_es/
     env_file:
       - .env
     depends_on:

@@ -3,17 +3,18 @@ import logging
 from contextlib import closing
 from typing import Iterator
 
-import models
 import pydantic
-import utils
-from settings import APP_CONFIG
+
+import postgres_to_es.models
+import postgres_to_es.utils
+from postgres_to_es.settings import APP_CONFIG
 
 logger = logging.getLogger(__name__)
 
 
 def extract_postgres(
     timestamp: str | None,
-) -> Iterator[tuple[models.MovieDocument]]:
+) -> Iterator[tuple[postgres_to_es.models.MovieDocument, ...]]:
     """Extract records from PostgreSQL.
 
     Retrieves all records that were modified after timestamp.
@@ -29,13 +30,15 @@ def extract_postgres(
     if timestamp is None:
         timestamp = datetime.datetime.min.isoformat()
 
-    query = utils.get_query(timestamp)
-    with closing(utils.get_postgres_connection()) as conn:
+    query = postgres_to_es.utils.get_query(timestamp)
+    with closing(postgres_to_es.utils.get_postgres_connection()) as conn:
         with conn.cursor() as cursor:
             cursor.execute(query)
             while rows := cursor.fetchmany(APP_CONFIG.chunk_size):
                 try:
-                    yield tuple(models.MovieDocument(**row) for row in rows)
+                    yield tuple(
+                        postgres_to_es.models.MovieDocument(**row) for row in rows
+                    )
                 except pydantic.ValidationError:
                     logger.exception(
                         "Error on validation. Check definitions of model and SQL query.",

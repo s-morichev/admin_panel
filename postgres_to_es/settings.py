@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Callable, Generator, TypedDict
 
 import backoff
 import elastic_transport
@@ -46,7 +47,22 @@ backoff_exceptions = (
 )
 
 # backoff configured to wait indefinitely with at most max_value seconds between retries
-BACKOFF_CONFIG = {
+BACKOFF_CONFIG2 = {
+    "wait_gen": backoff.expo,
+    "exception": backoff_exceptions,
+    "logger": "backoff",
+    "max_value": APP_CONFIG.backoff_interval,
+}
+
+
+class BackoffParameters(TypedDict):
+    wait_gen: Callable[..., Generator[float, None, None]]
+    exception: tuple[type[Exception], ...]
+    logger: str
+    max_value: float
+
+
+BACKOFF_CONFIG: BackoffParameters = {
     "wait_gen": backoff.expo,
     "exception": backoff_exceptions,
     "logger": "backoff",

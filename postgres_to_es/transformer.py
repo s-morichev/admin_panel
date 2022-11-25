@@ -1,14 +1,14 @@
 import datetime
 from typing import Any, Iterator
 
-import models
-from settings import APP_CONFIG
+import postgres_to_es.models
+from postgres_to_es.settings import APP_CONFIG
 
 ESActions = Iterator[dict[str, Any]]
 
 
 def transform(
-    models_generator: Iterator[tuple[models.MovieDocument]],
+    models_generator: Iterator[tuple[postgres_to_es.models.MovieDocument, ...]],
 ) -> Iterator[tuple[ESActions, datetime.datetime]]:
     """Transform pydantic models into elasticsearch documents.
 

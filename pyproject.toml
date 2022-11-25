@@ -42,6 +42,8 @@ flake8-bandit = "^4.1.1"
 flake8-broken-line = "^0.6.0"
 pep8-naming = "^0.13.2"
 darglint = "^1.8.1"
+mypy = "^0.991"
+types-psycopg2 = "^2.9.21.2"
 
 [tool.flake8]
 max-line-length = 88

@@ -1,6 +1,6 @@
 import logging.config
 
-from settings import APP_CONFIG
+from postgres_to_es.settings import APP_CONFIG
 
 LOGGING_CONFIG = {
     "version": 1,

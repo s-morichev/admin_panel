@@ -4,10 +4,11 @@ from contextlib import closing
 from typing import Any, Iterator
 
 import backoff
-import state_
-import utils
 from elasticsearch import helpers
-from settings import APP_CONFIG, BACKOFF_CONFIG
+
+import postgres_to_es.state_
+import postgres_to_es.utils
+from postgres_to_es.settings import APP_CONFIG, BACKOFF_CONFIG
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +29,7 @@ def _load_bulk(actions: ESActions) -> int:
     Returns:
         Number of loaded documents
     """
-    with closing(utils.get_elasticsearch_client()) as es:
+    with closing(postgres_to_es.utils.get_elasticsearch_client()) as es:
         successes, _ = helpers.bulk(
             client=es,
             actions=actions,
@@ -38,7 +39,7 @@ def _load_bulk(actions: ESActions) -> int:
 
 
 def load_elastic(
-    state: state_.State,
+    state: postgres_to_es.state_.State,
     documents_generator: Iterator[tuple[ESActions, datetime.datetime]],
 ) -> None:
     """Load documents into elasticsearch.
